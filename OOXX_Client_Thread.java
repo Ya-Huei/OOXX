@@ -14,13 +14,13 @@ class OOXX_Client_Thread extends Thread implements ActionListener{
 	private static int player;
 	private ImageIcon icons[] = {new ImageIcon("SmallFireDragon.gif"), new ImageIcon("WaterTurtle.gif")};
 	private ActionEvent e;
-	private int row; //直的
-	private int col; //橫的
+	private int row;
+	private int col;
 	
 	public JButton[] buttonArr;
 
 	private int[][] jFrame;
-	public OOXX_Client_Thread(String ip, int port,JButton[] arr) //多接buttonArr
+	public OOXX_Client_Thread(String ip, int port,JButton[] arr)
 	  {
 	     try{
 	        socket = new Socket(InetAddress.getByName(ip),port);
@@ -29,7 +29,7 @@ class OOXX_Client_Thread extends Thread implements ActionListener{
 			buttonArr = arr;
 	      }
 	      catch(IOException e){
-	         System.out.println("IO執行錯誤"); 
+	         System.out.println("IO execute failed!"); 
 	      }
 	  }
     public void run(){
@@ -37,33 +37,34 @@ class OOXX_Client_Thread extends Thread implements ActionListener{
             while(true){
 				str = instream.readUTF();
 				player = Integer.valueOf(str);
-				System.out.println("讀到資料player: " + player);
 				str = instream.readUTF();
 				row = Integer.valueOf(str);
-				System.out.println("讀到資料row: " + row);
             	str = instream.readUTF();
 				col = Integer.valueOf(str);
-				System.out.println("讀到資料col: " + col);
             	invoke(row, col, player);
-				System.out.println("畫圖");
+            	System.out.print("input player: " + player);
+            	System.out.print(", row: " + row);
+            	System.out.print(", col: " + col);
+				System.out.println();
             }
         }
         catch (Exception exception) {
 			exception.getMessage();
-            System.out.println("Thread執行錯誤");
+            System.out.println("Thread excute failed!");
         }
     }
 	public void send(int row, int col, int player){
 		try {
 			str = String.valueOf(player);
 			outstream.writeUTF(str);
-			System.out.println("送出資料Player: " + player);
 			str = String.valueOf(row);
 			outstream.writeUTF(str);
-			System.out.println("送出資料row: " + row);
 			str = String.valueOf(col);
 			outstream.writeUTF(str);
-			System.out.println("送出資料col: " + col);
+			System.out.print("send player: " + player);
+	    	System.out.print(", row: " + row);
+	    	System.out.print(", col: " + col);
+			System.out.println();
 			
 			
 		} catch (IOException e1) {
@@ -74,7 +75,7 @@ class OOXX_Client_Thread extends Thread implements ActionListener{
 		try{
 			str = instream.readUTF();
 			player = Integer.valueOf(str);
-			System.out.println("玩家設定: " + player);
+			System.out.println("Set player: " + player);
 			return player;
 		}
 		catch (IOException e1){
@@ -83,10 +84,10 @@ class OOXX_Client_Thread extends Thread implements ActionListener{
 		return -1;
 	}
 	
-	public void invoke(final int row, final int col, final int player) { //只讀不寫
-		EventQueue.invokeLater(new Runnable() { //調整UI
+	public void invoke(final int row, final int col, final int player) {
+		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				buttonArr[row * 3 + col].setIcon(icons[player]); //設定client的button
+				buttonArr[row * 3 + col].setIcon(icons[player]);
 			}
 		});
 	}

@@ -9,18 +9,18 @@ import java.util.*;
 public class OOXX_Client extends JFrame implements ActionListener { 
 	private ImageIcon icons[] = {new ImageIcon("SmallFireDragon.gif"), new ImageIcon("WaterTurtle.gif")};
 	
-	private static int row; // asdf
-	private static int col; //sdf
+	private static int row;
+	private static int col;
 	
 	private int[][] jFrame;
 	private static int player;
-	private int count = 0; //asdf
+	private int count = 0;
 	
-	public static JButton[] buttonArr; //dd
+	public static JButton[] buttonArr;
 
 	static private OOXX_Client_Thread OXCT;
 	
-	public OOXX_Client() throws HeadlessException { //wer
+	public OOXX_Client() throws HeadlessException {
 		this(3, 3);
 	}
 
@@ -30,31 +30,27 @@ public class OOXX_Client extends JFrame implements ActionListener {
 		this.col = col;
 	}
 	
-	//dd
 	public void newGame() {
 		jFrame = new int[row][col];
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
-				jFrame[i][j] = -1; //c
+				jFrame[i][j] = -1;
 			}
 		}
 		newFrame();
-		setVisible(true); //er
+		setVisible(true);
 	}
 	
-	//cd
 	private void newFrame() {
-		setLayout(new GridLayout(row, col)); //sdf
-		setTitle("OOXX"); //dd
+		setLayout(new GridLayout(row, col));
+		setTitle("OOXX");
 		
-		//cc
 		int w = col * 80;
 		int h = row * 80;
-		setSize(w, h); //ff
+		setSize(w, h);
 
 		buttonArr = new JButton[row * col];
 		
-		//ee
 		for (int i = 0; i < row * col; i++) {
 			buttonArr[i] = new JButton();
 			buttonArr[i].setActionCommand(String.valueOf(i));
@@ -63,7 +59,6 @@ public class OOXX_Client extends JFrame implements ActionListener {
 		}
 	}
 
-	// gg
 	private int check(int player, int[][] checkArr) {
 		int noBodyWin = -1;
 		int checkColCount = 0;
@@ -101,20 +96,20 @@ public class OOXX_Client extends JFrame implements ActionListener {
 	
 	public static void main(String[] args) {
 		OOXX_Client game = new OOXX_Client();
-		game.newGame(); //werer
+		game.newGame();
 		
-		OXCT = new OOXX_Client_Thread("127.0.0.1", 1200, buttonArr); //ww
-		player = OXCT.setPlayer(); //sssdfs
+		OXCT = new OOXX_Client_Thread("127.0.0.1", 1200, buttonArr);
+		player = OXCT.setPlayer();
 		OXCT.start();
 	}
 	
-	public void actionPerformed(ActionEvent e) { //sdf
-		String cmd = e.getActionCommand(); //www
+	public void actionPerformed(ActionEvent e) { 
+		String cmd = e.getActionCommand();
 		int loc = Integer.parseInt(cmd);
 		int aRow = loc / col;
 		int aCol = loc % col;
 		if (jFrame[aRow][aCol] != -1)
-			return; //dd
+			return;
 		OXCT.send(aRow, aCol, player);
 		jFrame[aRow][aCol] = player;
 		JButton btn = (JButton) e.getSource();
@@ -125,13 +120,13 @@ public class OOXX_Client extends JFrame implements ActionListener {
 		count++; //cc
 		
 		if (win == 0){
-			JOptionPane.showMessageDialog(null, "qwer", "sdf", JOptionPane.INFORMATION_MESSAGE); //likj
+			JOptionPane.showMessageDialog(null, "SmallFireDragon WIN!!", "Game Over", JOptionPane.INFORMATION_MESSAGE); //likj
 		}
 		else if(win == 1){
-			JOptionPane.showMessageDialog(null, "wer", "aasdf", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "WaterTurtle WIN!!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
 		}
 		else if(count == row * col){
-			JOptionPane.showMessageDialog(null, "cd", "er", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "The game has DRAWN!!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 }
